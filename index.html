@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A cute little surprise message just for Honey 💕">
+<meta property="og:title" content="For Honey 💕">
+<meta property="og:description" content="Tap the heart in his hand... there's a sweet message waiting 🧸💗">
+<meta name="theme-color" content="#ff6fa5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>For Honey 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#ffe3ec;
+    --bg2:#ffd1e0;
+    --pink:#ff6fa5;
+    --pink-dark:#e6497f;
+    --brown:#8a5a3c;
+    --brown-dark:#6e4429;
+    --cream:#fff5e9;
+    --card:#fffaf6;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    height:100%;
+    margin:0;
+    font-family:'Quicksand', sans-serif;
+    background:linear-gradient(180deg,var(--bg1),var(--bg2));
+    overflow-x:hidden;
+    overflow-y:auto;
+  }
+  .scene{
+    position:relative;
+    min-height:100%;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:40px 16px 60px;
+    overflow:hidden;
+  }
+  h1{
+    font-family:'Dancing Script', cursive;
+    color:var(--pink-dark);
+    font-size:clamp(28px,6vw,44px);
+    margin:0 0 10px;
+    text-align:center;
+    z-index:2;
+  }
+  .sub{
+    color:var(--brown-dark);
+    font-size:clamp(13px,3vw,16px);
+    margin:0 0 30px;
+    text-align:center;
+    z-index:2;
+    opacity:.85;
+  }
+  .stage{
+    position:relative;
+    width:min(340px,80vw);
+    height:min(340px,80vw);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+  }
+  .teddy{
+    position:absolute;
+    width:80%;
+    transition:transform 1.1s cubic-bezier(.22,1,.36,1);
+    filter:drop-shadow(0 12px 18px rgba(120,70,40,.25));
+  }
+  .teddy.moved{
+    transform:translateX(-46%) rotate(-8deg) scale(.92);
+  }
+  .heart-btn{
+    position:absolute;
+    left:50%;
+    top:57%;
+    width:15%;
+    aspect-ratio:1/1;
+    transform:translate(-50%,-50%);
+    cursor:pointer;
+    background:none;
+    border:none;
+    padding:0;
+    z-index:5;
+    animation:pulse 1.6s ease-in-out infinite;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .heart-btn svg{width:100%;height:100%;display:block;}
+  .heart-btn.hidden{
+    opacity:0;
+    pointer-events:none;
+    transform:translate(-50%,-50%) scale(.3);
+  }
+  @keyframes pulse{
+    0%,100%{transform:translate(-50%,-50%) scale(1);}
+    50%{transform:translate(-50%,-50%) scale(1.15);}
+  }
+  .message{
+    position:absolute;
+    right:2%;
+    top:50%;
+    transform:translateY(-50%) scale(.7);
+    width:min(270px,46vw);
+    background:var(--card);
+    border-radius:20px;
+    padding:18px 18px;
+    box-shadow:0 10px 30px rgba(150,80,60,.25);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .6s ease .3s, transform .6s ease .3s;
+    border:2px solid #ffd7e4;
+  }
+  .message.show{
+    opacity:1;
+    transform:translateY(-50%) scale(1);
+  }
+  .message p{
+    margin:0;
+    color:var(--brown-dark);
+    font-size:clamp(11px,2.4vw,13.5px);
+    line-height:1.5;
+    font-weight:600;
+  }
+  .message:after{
+    content:"";
+    position:absolute;
+    left:-10px;
+    top:50%;
+    transform:translateY(-50%);
+    border-width:8px 12px 8px 0;
+    border-style:solid;
+    border-color:transparent var(--card) transparent transparent;
+  }
+  .replay{
+    margin-top:34px;
+    z-index:2;
+    background:var(--pink);
+    color:white;
+    border:none;
+    padding:10px 22px;
+    border-radius:30px;
+    font-family:'Quicksand',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+    opacity:0;
+    transition:opacity .5s ease, transform .2s ease;
+    pointer-events:none;
+  }
+  .replay.show{opacity:1;pointer-events:auto;}
+  .replay:active{transform:scale(.95);}
+
+  .falling-heart{
+    position:fixed;
+    top:-40px;
+    pointer-events:none;
+    z-index:1;
+    opacity:.85;
+    animation-name:fall;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+  }
+  @keyframes fall{
+    0%{transform:translateY(0) rotate(0deg);}
+    100%{transform:translateY(110vh) rotate(360deg);}
+  }
+
+  @media (max-width:480px){
+    .message{
+      right:50%;
+      top:auto;
+      bottom:-10px;
+      transform:translate(50%,0) scale(.7);
+      width:84vw;
+    }
+    .message.show{transform:translate(50%,0) scale(1);}
+    .message:after{display:none;}
+    .teddy.moved{transform:translate(-14%,-14%) rotate(-8deg) scale(.85);}
+    .stage{height:min(300px,70vw);}
+  }
+</style>
+</head>
+<body>
+<div class="scene" id="scene">
+  <h1>Hey Honey 💗</h1>
+  <p class="sub">tap the little heart in my hand</p>
+
+  <div class="stage">
+    <!-- Teddy Bear SVG -->
+    <svg class="teddy" id="teddy" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="205" rx="55" ry="10" fill="#00000012"/>
+      <!-- ears -->
+      <circle cx="55" cy="45" r="22" fill="#c98a5e"/>
+      <circle cx="145" cy="45" r="22" fill="#c98a5e"/>
+      <circle cx="55" cy="45" r="11" fill="#e9b98d"/>
+      <circle cx="145" cy="45" r="11" fill="#e9b98d"/>
+      <!-- body -->
+      <ellipse cx="100" cy="150" rx="55" ry="50" fill="#c98a5e"/>
+      <ellipse cx="100" cy="160" rx="34" ry="30" fill="#e9b98d"/>
+      <!-- head -->
+      <circle cx="100" cy="75" r="48" fill="#c98a5e"/>
+      <ellipse cx="100" cy="88" rx="26" ry="20" fill="#e9b98d"/>
+      <!-- face -->
+      <circle cx="85" cy="68" r="5" fill="#4a2f1f"/>
+      <circle cx="115" cy="68" r="5" fill="#4a2f1f"/>
+      <ellipse cx="100" cy="86" rx="7" ry="5" fill="#4a2f1f"/>
+      <path d="M92 94 Q100 100 108 94" stroke="#4a2f1f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- cheeks -->
+      <ellipse cx="75" cy="85" rx="7" ry="5" fill="#ff9eb8" opacity="0.6"/>
+      <ellipse cx="125" cy="85" rx="7" ry="5" fill="#ff9eb8" opacity="0.6"/>
+      <!-- left arm hugging down -->
+      <ellipse cx="45" cy="140" rx="18" ry="30" fill="#c98a5e" transform="rotate(-15 45 140)"/>
+      <!-- right arm raised holding heart -->
+      <ellipse cx="150" cy="115" rx="17" ry="28" fill="#c98a5e" transform="rotate(35 150 115)"/>
+      <ellipse cx="163" cy="98" rx="12" ry="14" fill="#e9b98d"/>
+      <!-- feet -->
+      <ellipse cx="70" cy="200" rx="20" ry="13" fill="#c98a5e"/>
+      <ellipse cx="130" cy="200" rx="20" ry="13" fill="#c98a5e"/>
+      <ellipse cx="70" cy="203" rx="11" ry="7" fill="#e9b98d"/>
+      <ellipse cx="130" cy="203" rx="11" ry="7" fill="#e9b98d"/>
+    </svg>
+
+    <!-- clickable heart in the paw -->
+    <button class="heart-btn" id="heartBtn" aria-label="click the heart">
+      <svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 28C16 28 1 18.5 1 8.8C1 3.9 4.9 0 9.7 0C12.4 0 14.9 1.3 16 3.4C17.1 1.3 19.6 0 22.3 0C27.1 0 31 3.9 31 8.8C31 18.5 16 28 16 28Z" fill="#ff5c8a"/>
+      </svg>
+    </button>
+
+    <!-- message bubble -->
+    <div class="message" id="message">
+      <p>Heyyy Honey 🐻💕 I just wanted to say... I really, really like your company. Being around you makes everything feel a little softer and warmer 🌸✨ And hey — if something's ever bothering you, even just a little, please tell me. I'd never want to be the reason your mood goes off, not even for a second 🥺💗 I'm always right here for you.</p>
+    </div>
+  </div>
+
+  <button class="replay" id="replayBtn">tap again 🐻</button>
+</div>
+
+<script>
+  const heartBtn = document.getElementById('heartBtn');
+  const teddy = document.getElementById('teddy');
+  const message = document.getElementById('message');
+  const replayBtn = document.getElementById('replayBtn');
+
+  function reveal(){
+    teddy.classList.add('moved');
+    heartBtn.classList.add('hidden');
+    setTimeout(()=> message.classList.add('show'), 250);
+    setTimeout(()=> replayBtn.classList.add('show'), 500);
+  }
+
+  function reset(){
+    teddy.classList.remove('moved');
+    message.classList.remove('show');
+    replayBtn.classList.remove('show');
+    setTimeout(()=> heartBtn.classList.remove('hidden'), 500);
+  }
+
+  heartBtn.addEventListener('click', reveal);
+  replayBtn.addEventListener('click', reset);
+
+  // falling hearts background
+  function spawnHeart(){
+    const h = document.createElement('div');
+    h.className = 'falling-heart';
+    const size = 10 + Math.random()*18;
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.fontSize = size + 'px';
+    h.style.animationDuration = (6 + Math.random()*6) + 's';
+    h.style.animationDelay = '0s';
+    const colors = ['#ff8fab','#ff6fa5','#ffb3c6','#ff4d88'];
+    h.style.color = colors[Math.floor(Math.random()*colors.length)];
+    h.textContent = '❤';
+    document.body.appendChild(h);
+    setTimeout(()=> h.remove(), 13000);
+  }
+  setInterval(spawnHeart, 450);
+  for(let i=0;i<8;i++) setTimeout(spawnHeart, i*200);
+</script>
+</body>
+</html>
